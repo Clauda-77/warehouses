@@ -34,13 +34,13 @@ class BillRecordsRelationManager extends RelationManager
                             ->default(fn ($get) => $this->getItemCode($get('item_id')))
                             ->disabled()
                             ->dehydrated(),
-                        
+
                         Forms\Components\TextInput::make('batch_number')
                             ->label('رقم البطاقة')
                             ->columnSpan(1)
                             ->maxLength(50)
                             ->nullable(),
-                        
+
                         Forms\Components\Select::make('item_id')
                             ->label('اسم المادة')
                             ->columnSpan(2)
@@ -57,14 +57,14 @@ class BillRecordsRelationManager extends RelationManager
                                     $set('unit_price', $item->sale_price);
                                 }
                             }),
-                        
+
                         Forms\Components\TextInput::make('unit')
                             ->label('الوحدة')
                             ->columnSpan(1)
                             ->default('عدد')
                             ->disabled()
                             ->dehydrated(),
-                        
+
                         Forms\Components\TextInput::make('quantity')
                             ->label('الكمية')
                             ->columnSpan(1)
@@ -77,7 +77,7 @@ class BillRecordsRelationManager extends RelationManager
                                 $unitPrice = $get('unit_price') ?? 0;
                                 $set('total_price', $unitPrice * $state);
                             }),
-                        
+
                         Forms\Components\TextInput::make('unit_price')
                             ->label('السعر')
                             ->columnSpan(1)
@@ -89,14 +89,14 @@ class BillRecordsRelationManager extends RelationManager
                                 $quantity = $get('quantity') ?? 0;
                                 $set('total_price', $state * $quantity);
                             }),
-                        
+
                         Forms\Components\TextInput::make('total_price')
                             ->label('القيمة')
                             ->columnSpan(1)
                             ->numeric()
                             ->disabled()
                             ->dehydrated(),
-                        
+
                         Forms\Components\Hidden::make('warehouse_id')
                             ->default(fn () => $this->getWarehouseId()),
                     ]),
@@ -110,43 +110,43 @@ class BillRecordsRelationManager extends RelationManager
             ->columns([
                 Tables\Columns\TextColumn::make('item_code')
                     ->label('رقم المادة')
-                    ->searchable()
-                    ->sortable(),
-                
+                    ->searchable(),
+//                    ->sortable(),
+
                 Tables\Columns\TextColumn::make('batch_number')
                     ->label('رقم البطاقة')
-                    ->searchable()
-                    ->sortable(),
-                
+                    ->searchable(),
+//                    ->sortable(),
+
                 Tables\Columns\TextColumn::make('item.name')
                     ->label('اسم المادة')
-                    ->searchable()
-                    ->sortable(),
-                
+                    ->searchable(),
+//                    ->sortable(),
+
                 Tables\Columns\TextColumn::make('quantity')
                     ->label('الكمية')
-                    ->numeric(decimalPlaces: 2)
-                    ->sortable(),
-                
+                    ->numeric(decimalPlaces: 2),
+//                    ->sortable(),
+
                 Tables\Columns\TextColumn::make('unit_price')
                     ->label('السعر')
-                    ->money('SDG')
-                    ->sortable(),
-                
+                    ->money('SDG'),
+//                    ->sortable(),
+
                 Tables\Columns\TextColumn::make('total_price')
                     ->label('القيمة')
                     ->money('SDG')
-                    ->sortable()
+//                    ->sortable()
                     ->summarize([
                         Tables\Columns\Summarizers\Sum::make()
                             ->label('المجموع')
                             ->money('SDG'),
                     ]),
-                
+
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('تاريخ الإضافة')
                     ->dateTime('d/m/Y H:i')
-                    ->sortable()
+//                    ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
@@ -167,7 +167,7 @@ class BillRecordsRelationManager extends RelationManager
                     ->after(function () {
                         $this->ownerRecord->refresh();
                         $this->ownerRecord->updateTotals();
-                        
+
                         Notification::make()
                             ->title('تم إضافة المادة بنجاح')
                             ->success()
@@ -182,7 +182,7 @@ class BillRecordsRelationManager extends RelationManager
                         $this->ownerRecord->refresh();
                         $this->ownerRecord->updateTotals();
                     }),
-                
+
                 Tables\Actions\DeleteAction::make()
                     ->label('حذف')
                     ->visible(fn ($record) => $record->bill->status === BillStatus::DRAFT->value)

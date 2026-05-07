@@ -29,13 +29,13 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
-            ->login()    
-              ->homeUrl(fn (): string => match (auth()->user()?->role) {
-            UserRole::ADMIN => '/admin',
-            UserRole::MONITOR => '/monitor/dashboard',
-            UserRole::WAREHOUSE_KEEPER => '/warehouse/dashboard',
-            default => '/',
-        })
+            ->login()
+            //       ->homeUrl(fn (): string => match (auth()->user()?->role) {
+            //     UserRole::ADMIN => '/admin',
+            //     UserRole::MONITOR => '/monitor/dashboard',
+            //     UserRole::WAREHOUSE_KEEPER => '/warehouse/dashboard',
+            //     default => '/',
+            // })
             ->colors([
                 'primary' => Color::Blue,
                 'danger' => Color::Red,
