@@ -12,13 +12,12 @@ class PrintBillPage extends Page
     protected static string $resource = BillResource::class;
     protected static string $view = 'bills.print-card';
 
-    // تم حذف array $parameters من توقيع الدالة لتتوافق مع BasePage
-    // نستخدم Request للحصول على معرف السجل من الرابط مباشرة
+
     public function getViewData(): array
     {
         $recordId = Request::route('record');
 
-        // جلب الفاتورة مع علاقتها (المواد، المستودعات)
+
         $record = Bill::with([
             'billRecords.item',
             'sourceWarehouse',
