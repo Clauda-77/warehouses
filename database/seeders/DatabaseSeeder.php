@@ -2,26 +2,32 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Enums\UserRole;
 
 class DatabaseSeeder extends Seeder
 {
-    use WithoutModelEvents;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3253b6dee7e8eab7aa743eca71bc03b93dd6b718
     public function run(): void
     {
-        // User::factory(10)->create();
 
+<<<<<<< HEAD
         User::factory()->create([
             'username' => 'Test',
             'name' => 'Test User',
             'email' => 'test@example.com',
             'password' => '123',
             'role' => 'admin'
+=======
+
+        $this->call([
+            RolePermissionSeeder::class,
+            OldCompleteDataSeeder::class,
+>>>>>>> 3253b6dee7e8eab7aa743eca71bc03b93dd6b718
         ]);
     }
 }
