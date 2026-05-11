@@ -30,35 +30,47 @@ class WarehouseResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('code')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('type')
-                    ->required()
-                    ->maxLength(255)
-                    ->default('central'),
-                Forms\Components\Textarea::make('location')
-                    ->columnSpanFull(),
-                Forms\Components\TextInput::make('contact_person')
-                    ->maxLength(255)
-                    ->default(null),
-                Forms\Components\TextInput::make('phone')
-                    ->tel()
-                    ->maxLength(255)
-                    ->default(null),
-                Forms\Components\Toggle::make('is_active')
-                    ->required(),
-                Forms\Components\TextInput::make('total_items')
-                    ->required()
-                    ->numeric()
-                    ->default(0),
-                Forms\Components\TextInput::make('total_value')
-                    ->required()
-                    ->numeric()
-                    ->default(0.00),
+
+                Forms\Components\Section::make('المعلومات الأساسية:')
+                    ->description('قم بتعبئة الحقول التالية :')
+                    ->schema(components: [
+                        Forms\Components\TextInput::make('code')
+                            ->required()
+                            ->maxLength(255),
+                        Forms\Components\TextInput::make('name')
+                            ->required()
+                            ->maxLength(255),
+                        Forms\Components\TextInput::make('type')
+                            ->required()
+                            ->maxLength(255)
+                            ->default('central'),
+                        Forms\Components\TextInput::make('total_items')
+                            ->required()
+                            ->numeric()
+                            ->default(0),
+                        Forms\Components\TextInput::make('total_value')
+                            ->required()
+                            ->numeric()
+                            ->default(0.00),
+                    ])->columns(3),
+                Forms\Components\Section::make()
+                    // ->description('قم بتعبئة الحقول التالية :')
+                    ->schema(components: [
+                        Forms\Components\TextInput::make('contact_person')
+                            ->maxLength(255)
+                            ->default(null),
+                        Forms\Components\TextInput::make('phone')
+                            ->tel()
+                            ->maxLength(255)
+                            ->default(null),
+                        Forms\Components\Textarea::make('location')
+                            ->columnSpanFull(),
+                        Forms\Components\Toggle::make('is_active')
+                            ->required(),
+                    ])->columns(2),
+
+
+
             ]);
     }
 
@@ -116,7 +128,7 @@ class WarehouseResource extends Resource
             //
         ];
     }
-        public static function getNavigationBadge(): ?string
+    public static function getNavigationBadge(): ?string
     {
         return static::getModel()::count();
     }

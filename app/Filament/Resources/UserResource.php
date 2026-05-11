@@ -175,16 +175,17 @@ class UserResource extends Resource
                             default => $state,
                         };
                     })
-                    ->color(function ($state) {
-                        return match($state) {
-                            'admin' => 'danger',
-                            'manager' => 'success',
-                            'warehouse_keeper' => 'info',
-                            'accountant' => 'warning',
-                            'viewer' => 'gray',
-                            default => 'gray',
-                        };
-                    })
+                    ->color(fn ($state) => $state?->color())
+                    // ->color(function ($state): string {
+                    //     return match($state) {
+                    //         'admin' => 'danger',
+                    //         'manager' => 'success',
+                    //         'warehouse_keeper' => 'info',
+                    //         'accountant' => 'warning',
+                    //         'viewer' => 'gray',
+                    //         default => 'gray',
+                    //     };
+                    // })
                     ->sortable(),
                     
                 Tables\Columns\IconColumn::make('is_active')
@@ -306,4 +307,5 @@ class UserResource extends Resource
     {
         return static::getModel()::count();
     }
+
 }
