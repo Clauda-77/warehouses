@@ -22,7 +22,7 @@ class CategoryResource extends Resource
     protected static ?string $model = Category::class;
     protected static ?string $navigationIcon = 'heroicon-o-tag';
     protected static ?string $navigationLabel = 'أصناف';
-    protected static ?string $modelLabel = 'فئة';
+    protected static ?string $modelLabel = 'صنف';
     protected static ?string $pluralModelLabel = 'أصناف';
     protected static ?string $navigationGroup = 'التصنيفات';
     protected static ?string $activeNavigationIcon = 'heroicon-o-chevron-double-down';

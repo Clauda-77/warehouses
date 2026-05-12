@@ -43,18 +43,18 @@ class CustomerResource extends Resource
                             ->required()
                             ->maxLength(255),
                         Forms\Components\TextInput::make('name')
-                            ->label(label: 'الاسم')
+                            ->label('الاسم')
                             ->placeholder('الاسم')
                             ->required()
                             ->maxLength(255),
                         Forms\Components\TextInput::make('phone')
-                            ->label(label: 'رقم الهاتف')
+                            ->label( 'رقم الهاتف')
                             ->placeholder('09')
                             ->tel()
                             ->maxLength(255)
                             ->default(null),
                         Forms\Components\TextInput::make('email')
-                            ->label(label: 'الايميل')
+                            ->label( 'الايميل')
                             ->placeholder('')
                             ->maxLength(255)
                             ->email(),
@@ -134,15 +134,20 @@ class CustomerResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('code')
+                    ->label('الرمز')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('name')
+                    ->label(label: 'الاسم')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('phone')
-                    ->searchable(),
+                    ->searchable()
+                    ->label(label: 'رقم الهاتف'),
                 Tables\Columns\TextColumn::make('email')
+                    ->label(label: 'الايميل')
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('address')
+                    ->label('العنوان')
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('tax_number')
                     ->sortable(),

@@ -31,41 +31,55 @@ class SupplierResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('code')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('contact_person')
-                    ->maxLength(255)
-                    ->default(null),
-                Forms\Components\TextInput::make('phone')
-                    ->tel()
-                    ->maxLength(255)
-                    ->default(null),
-                Forms\Components\TextInput::make('email')
-                    ->email()
-                    ->maxLength(255)
-                    ->default(null),
-                Forms\Components\Textarea::make('address')
-                    ->columnSpanFull(),
-                Forms\Components\TextInput::make('tax_number')
-                    ->maxLength(255)
-                    ->default(null),
-                Forms\Components\TextInput::make('commercial_register')
-                    ->maxLength(255)
-                    ->default(null),
-                Forms\Components\TextInput::make('total_purchases')
-                    ->required()
-                    ->numeric()
-                    ->default(0.00),
-                Forms\Components\TextInput::make('balance')
-                    ->required()
-                    ->numeric()
-                    ->default(0.00),
-                Forms\Components\Toggle::make('is_active')
-                    ->required(),
+                Forms\Components\Section::make('المعلومات الشخصية')
+                    ->description('قم بتعبئة الحقول التالية :')
+                    ->schema(components: [
+                        Forms\Components\TextInput::make('code')
+                            ->required()
+                            ->maxLength(255)
+                            ->placeholder('الرمز'),
+                        Forms\Components\TextInput::make('name')
+                            ->required()
+                            ->maxLength(255)
+                            ->placeholder('الاسم'),
+                        Forms\Components\TextInput::make('phone')
+                            ->tel()
+                            ->maxLength(255)
+                            ->placeholder('09')
+                            ->default(null),
+                        Forms\Components\TextInput::make('email')
+                            ->email()
+                            ->maxLength(255)
+                            ->default(null),
+                        Forms\Components\Textarea::make('address')
+                            ->placeholder('عنوان المورد')
+                            ->columnSpanFull(),
+                    ])->columns(4),
+
+                Forms\Components\Section::make('معلومات أخرى: ')
+                    // ->description('قم بتعبئة الحقول التالية :')
+                    ->schema(components: [
+                        Forms\Components\TextInput::make('tax_number')
+                            ->maxLength(255)
+                            ->default(null),
+                        Forms\Components\TextInput::make('commercial_register')
+                            ->maxLength(255)
+                            ->default(null),
+                        Forms\Components\TextInput::make('balance')
+                            ->required()
+                            ->numeric()
+                            ->default(0.00),
+                        Forms\Components\TextInput::make('total_purchases')
+                            ->required()
+                            ->numeric()
+                            ->default(0.00),
+                        Forms\Components\TextInput::make('contact_person')
+                            ->maxLength(255)
+                            ->default(null),
+                        Forms\Components\Toggle::make('is_active')
+                            ->required()
+                            ->columnSpanFull(),
+                    ])->columns(3),
             ]);
     }
 
@@ -114,7 +128,7 @@ class SupplierResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
-                                Tables\Actions\DeleteAction::make()
+                Tables\Actions\DeleteAction::make()
                     ->successNotification(
                         Notification::make()
                             ->success()
@@ -136,15 +150,15 @@ class SupplierResource extends Resource
             //
         ];
     }
-        public static function getNavigationBadge(): ?string
+    public static function getNavigationBadge(): ?string
     {
         return static::getModel()::count();
     }
-        public static function getNavigationGroup(): ?string
+    public static function getNavigationGroup(): ?string
     {
         return 'إدارة النظام';
     }
-    
+
 
     public static function getPages(): array
     {

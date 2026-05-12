@@ -1,5 +1,5 @@
 <?php
- 
+
 
 namespace App\Models;
 
@@ -23,7 +23,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'password',
         'phone',
         'avatar',
-        'role', 
+        'role',
         'is_active',
         'primary_warehouse_id',
         'secondary_warehouse_id',
@@ -39,11 +39,11 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
         'is_active' => 'boolean',
-        'role' => UserRole::class,  
+        'role' => UserRole::class,
         'settings' => 'array',
     ];
 
-     public function primaryWarehouse()
+    public function primaryWarehouse()
     {
         return $this->belongsTo(Warehouse::class, 'primary_warehouse_id');
     }
@@ -53,7 +53,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsTo(Warehouse::class, 'secondary_warehouse_id');
     }
 
- 
+
     public function getAllowedWarehouses()
     {
         if ($this->role === UserRole::ADMIN) {
@@ -61,11 +61,11 @@ class User extends Authenticatable implements MustVerifyEmail
         }
 
         $warehouses = collect();
-        
+
         if ($this->primary_warehouse_id) {
             $warehouses->push($this->primaryWarehouse);
         }
-        
+
         if ($this->secondary_warehouse_id) {
             $warehouses->push($this->secondaryWarehouse);
         }

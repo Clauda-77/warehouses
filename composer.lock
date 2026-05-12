@@ -4,7 +4,11 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
+<<<<<<< HEAD
+    "content-hash": "1e6315836d89a7d1e6d096c09f124edd",
+=======
     "content-hash": "c3bf18cdb0c735c4f57562ac5a3348cc",
+>>>>>>> 3253b6dee7e8eab7aa743eca71bc03b93dd6b718
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -74,6 +78,18 @@
         },
         {
             "name": "barryvdh/laravel-dompdf",
+<<<<<<< HEAD
+            "version": "v3.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/barryvdh/laravel-dompdf.git",
+                "reference": "8e71b99fc53bb8eb77f316c3c452dd74ab7cb25d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/barryvdh/laravel-dompdf/zipball/8e71b99fc53bb8eb77f316c3c452dd74ab7cb25d",
+                "reference": "8e71b99fc53bb8eb77f316c3c452dd74ab7cb25d",
+=======
             "version": "v3.1.2",
             "source": {
                 "type": "git",
@@ -84,16 +100,25 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/barryvdh/laravel-dompdf/zipball/ee3b72b19ccdf57d0243116ecb2b90261344dedc",
                 "reference": "ee3b72b19ccdf57d0243116ecb2b90261344dedc",
+>>>>>>> 3253b6dee7e8eab7aa743eca71bc03b93dd6b718
                 "shasum": ""
             },
             "require": {
                 "dompdf/dompdf": "^3.0",
+<<<<<<< HEAD
+                "illuminate/support": "^9|^10|^11|^12",
+=======
                 "illuminate/support": "^9|^10|^11|^12|^13.0",
+>>>>>>> 3253b6dee7e8eab7aa743eca71bc03b93dd6b718
                 "php": "^8.1"
             },
             "require-dev": {
                 "larastan/larastan": "^2.7|^3.0",
+<<<<<<< HEAD
+                "orchestra/testbench": "^7|^8|^9|^10",
+=======
                 "orchestra/testbench": "^7|^8|^9.16|^10|^11.0",
+>>>>>>> 3253b6dee7e8eab7aa743eca71bc03b93dd6b718
                 "phpro/grumphp": "^2.5",
                 "squizlabs/php_codesniffer": "^3.5"
             },
@@ -135,7 +160,11 @@
             ],
             "support": {
                 "issues": "https://github.com/barryvdh/laravel-dompdf/issues",
+<<<<<<< HEAD
+                "source": "https://github.com/barryvdh/laravel-dompdf/tree/v3.1.1"
+=======
                 "source": "https://github.com/barryvdh/laravel-dompdf/tree/v3.1.2"
+>>>>>>> 3253b6dee7e8eab7aa743eca71bc03b93dd6b718
             },
             "funding": [
                 {
@@ -147,7 +176,11 @@
                     "type": "github"
                 }
             ],
+<<<<<<< HEAD
+            "time": "2025-02-13T15:07:54+00:00"
+=======
             "time": "2026-02-21T08:51:10+00:00"
+>>>>>>> 3253b6dee7e8eab7aa743eca71bc03b93dd6b718
         },
         {
             "name": "blade-ui-kit/blade-heroicons",
@@ -931,6 +964,18 @@
         },
         {
             "name": "dompdf/dompdf",
+<<<<<<< HEAD
+            "version": "v3.1.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dompdf/dompdf.git",
+                "reference": "db712c90c5b9868df3600e64e68da62e78a34623"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dompdf/dompdf/zipball/db712c90c5b9868df3600e64e68da62e78a34623",
+                "reference": "db712c90c5b9868df3600e64e68da62e78a34623",
+=======
             "version": "v3.1.5",
             "source": {
                 "type": "git",
@@ -941,6 +986,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/dompdf/dompdf/zipball/f11ead23a8a76d0ff9bbc6c7c8fd7e05ca328496",
                 "reference": "f11ead23a8a76d0ff9bbc6c7c8fd7e05ca328496",
+>>>>>>> 3253b6dee7e8eab7aa743eca71bc03b93dd6b718
                 "shasum": ""
             },
             "require": {
@@ -989,9 +1035,15 @@
             "homepage": "https://github.com/dompdf/dompdf",
             "support": {
                 "issues": "https://github.com/dompdf/dompdf/issues",
+<<<<<<< HEAD
+                "source": "https://github.com/dompdf/dompdf/tree/v3.1.4"
+            },
+            "time": "2025-10-29T12:43:30+00:00"
+=======
                 "source": "https://github.com/dompdf/dompdf/tree/v3.1.5"
             },
             "time": "2026-03-03T13:54:37+00:00"
+>>>>>>> 3253b6dee7e8eab7aa743eca71bc03b93dd6b718
         },
         {
             "name": "dompdf/php-font-lib",
@@ -5489,6 +5541,18 @@
         },
         {
             "name": "sabberworm/php-css-parser",
+<<<<<<< HEAD
+            "version": "v9.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/MyIntervals/PHP-CSS-Parser.git",
+                "reference": "1b363fdbdc6dd0ca0f4bf98d3a4d7f388133f1fb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/MyIntervals/PHP-CSS-Parser/zipball/1b363fdbdc6dd0ca0f4bf98d3a4d7f388133f1fb",
+                "reference": "1b363fdbdc6dd0ca0f4bf98d3a4d7f388133f1fb",
+=======
             "version": "v9.3.0",
             "source": {
                 "type": "git",
@@ -5499,16 +5563,30 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/MyIntervals/PHP-CSS-Parser/zipball/88dbd0f7f91abbfe4402d0a3071e9ff4d81ed949",
                 "reference": "88dbd0f7f91abbfe4402d0a3071e9ff4d81ed949",
+>>>>>>> 3253b6dee7e8eab7aa743eca71bc03b93dd6b718
                 "shasum": ""
             },
             "require": {
                 "ext-iconv": "*",
                 "php": "^7.2.0 || ~8.0.0 || ~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0",
+<<<<<<< HEAD
+                "thecodingmachine/safe": "^1.3 || ^2.5 || ^3.3"
+=======
                 "thecodingmachine/safe": "^1.3 || ^2.5 || ^3.4"
+>>>>>>> 3253b6dee7e8eab7aa743eca71bc03b93dd6b718
             },
             "require-dev": {
                 "php-parallel-lint/php-parallel-lint": "1.4.0",
                 "phpstan/extension-installer": "1.4.3",
+<<<<<<< HEAD
+                "phpstan/phpstan": "1.12.28 || 2.1.25",
+                "phpstan/phpstan-phpunit": "1.4.2 || 2.0.7",
+                "phpstan/phpstan-strict-rules": "1.6.2 || 2.0.6",
+                "phpunit/phpunit": "8.5.46",
+                "rawr/phpunit-data-provider": "3.3.1",
+                "rector/rector": "1.2.10 || 2.1.7",
+                "rector/type-perfect": "1.0.0 || 2.1.0"
+=======
                 "phpstan/phpstan": "1.12.32 || 2.1.32",
                 "phpstan/phpstan-phpunit": "1.4.2 || 2.0.8",
                 "phpstan/phpstan-strict-rules": "1.6.2 || 2.0.7",
@@ -5518,6 +5596,7 @@
                 "rector/type-perfect": "1.0.0 || 2.1.0",
                 "squizlabs/php_codesniffer": "4.0.1",
                 "thecodingmachine/phpstan-safe-rule": "1.2.0 || 1.4.1"
+>>>>>>> 3253b6dee7e8eab7aa743eca71bc03b93dd6b718
             },
             "suggest": {
                 "ext-mbstring": "for parsing UTF-8 CSS"
@@ -5525,6 +5604,12 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
+<<<<<<< HEAD
+                    "dev-main": "9.2.x-dev"
+                }
+            },
+            "autoload": {
+=======
                     "dev-main": "9.4.x-dev"
                 }
             },
@@ -5533,6 +5618,7 @@
                     "src/Rule/Rule.php",
                     "src/RuleSet/RuleContainer.php"
                 ],
+>>>>>>> 3253b6dee7e8eab7aa743eca71bc03b93dd6b718
                 "psr-4": {
                     "Sabberworm\\CSS\\": "src/"
                 }
@@ -5563,6 +5649,11 @@
             ],
             "support": {
                 "issues": "https://github.com/MyIntervals/PHP-CSS-Parser/issues",
+<<<<<<< HEAD
+                "source": "https://github.com/MyIntervals/PHP-CSS-Parser/tree/v9.1.0"
+            },
+            "time": "2025-09-14T07:37:21+00:00"
+=======
                 "source": "https://github.com/MyIntervals/PHP-CSS-Parser/tree/v9.3.0"
             },
             "time": "2026-03-03T17:31:43+00:00"
@@ -5638,6 +5729,7 @@
                 }
             ],
             "time": "2026-03-13T08:38:20+00:00"
+>>>>>>> 3253b6dee7e8eab7aa743eca71bc03b93dd6b718
         },
         {
             "name": "spatie/color",
@@ -5820,16 +5912,16 @@
         },
         {
             "name": "spatie/laravel-permission",
-            "version": "6.24.0",
+            "version": "6.24.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-permission.git",
-                "reference": "76adb1fc8d07c16a0721c35c4cc330b7a12598d7"
+                "reference": "eefc9d17eba80d023d6bff313f882cb2bcd691a3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-permission/zipball/76adb1fc8d07c16a0721c35c4cc330b7a12598d7",
-                "reference": "76adb1fc8d07c16a0721c35c4cc330b7a12598d7",
+                "url": "https://api.github.com/repos/spatie/laravel-permission/zipball/eefc9d17eba80d023d6bff313f882cb2bcd691a3",
+                "reference": "eefc9d17eba80d023d6bff313f882cb2bcd691a3",
                 "shasum": ""
             },
             "require": {
@@ -5891,7 +5983,7 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/laravel-permission/issues",
-                "source": "https://github.com/spatie/laravel-permission/tree/6.24.0"
+                "source": "https://github.com/spatie/laravel-permission/tree/6.24.1"
             },
             "funding": [
                 {
@@ -5899,7 +5991,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-12-13T21:45:21+00:00"
+            "time": "2026-02-09T21:10:03+00:00"
         },
         {
             "name": "symfony/clock",

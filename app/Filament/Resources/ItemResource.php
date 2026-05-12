@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Notifications\Notification;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ItemResource extends Resource
 {
