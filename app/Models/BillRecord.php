@@ -7,61 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class BillRecord extends Model
 {
-    // use HasFactory;
 
-    // protected $fillable = [
-    //     'bill_id',
-    //     'item_id',
-    //     'warehouse_id',
-    //     'quantity',
-    //     'received_quantity',
-    //     'unit_price',
-    //     'total_price',
-    //     'cost_price',
-    //     'stock_before',
-    //     'stock_after',
-    //     'batch_number',
-    //     'expiry_date',
-    //     'notes',
-    // ];
-
-    // protected $casts = [
-    //     'quantity' => 'decimal:2',
-    //     'received_quantity' => 'decimal:2',
-    //     'unit_price' => 'decimal:2',
-    //     'total_price' => 'decimal:2',
-    //     'cost_price' => 'decimal:2',
-    //     'stock_before' => 'decimal:2',
-    //     'stock_after' => 'decimal:2',
-    //     'expiry_date' => 'date',
-    // ];
-
-   
-    // public function bill()
-    // {
-    //     return $this->belongsTo(Bill::class);
-    // }
-
-    // public function item()
-    // {
-    //     return $this->belongsTo(Item::class);
-    // }
-
-    // public function warehouse()
-    // {
-    //     return $this->belongsTo(Warehouse::class);
-    // }
-
- 
-    // public function getRemainingQuantityAttribute()
-    // {
-    //     return $this->quantity - $this->received_quantity;
-    // }
-
-    // public function isFullyReceived()
-    // {
-    //     return $this->quantity == $this->received_quantity;
-    // } use HasFactory;
 
     protected $fillable = [
         'bill_id', 'item_id', 'item_code', 'batch_number', 'unit',
@@ -78,8 +24,8 @@ class BillRecord extends Model
         'stock_after' => 'decimal:2',
     ];
 
-  
-    
+
+
 
    public function bill()
     {
@@ -96,7 +42,7 @@ class BillRecord extends Model
         return $this->belongsTo(Warehouse::class);
     }
 
-   
+
     public function getRemainingQuantityAttribute()
     {
         return $this->quantity - $this->received_quantity;
@@ -111,5 +57,5 @@ class BillRecord extends Model
     {
         return $this->quantity * $this->unit_price;
     }
-    
+
 }

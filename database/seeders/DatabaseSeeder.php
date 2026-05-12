@@ -13,7 +13,8 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             RolePermissionSeeder::class,
-            OldCompleteDataSeeder::class,
+//            OldCompleteDataSeeder::class,
+            MigrateOldDataSeeder::class,
         ]);
     }
 }
