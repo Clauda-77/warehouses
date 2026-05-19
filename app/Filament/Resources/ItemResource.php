@@ -175,6 +175,7 @@ class ItemResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([]),
+        
             ]);
     }
 

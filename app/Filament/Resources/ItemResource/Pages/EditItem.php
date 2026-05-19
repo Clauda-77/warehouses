@@ -17,6 +17,19 @@ class EditItem extends EditRecord
     //     return [
     //     ];
     // }
+
+
+    protected function getHeaderActions(): array
+    {
+        return [
+             
+            Actions\Action::make('print')
+                ->label('طباعة البطاقة')
+                ->icon('heroicon-o-printer')
+                ->url(fn () => route('items.print', $this->record->id))
+                ->openUrlInNewTab(),
+        ];
+    }
         protected function getRedirectUrl(): string
     {
         return $this->getResource()::getUrl('index');
