@@ -79,7 +79,7 @@ $movements[] = [
             //     'out'             => $out,
             //     'balance'         => $balance,
             //     'document_number' => $bill->bill_number,
-            //     'document_type'   => $documentTypeAr,  // الآن عربي
+            //     'document_type'   => $documentTypeAr,  
             //     'notes'           => $bill->notes ?? $record->notes ?? '',
             // ];
         }
