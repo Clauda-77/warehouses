@@ -35,9 +35,6 @@
             margin: 0.5%;
         }
 
-        /* .left-section {   margin: 15px 16rem 0 0;}
-        .center-section { margin: 20px 10rem 0 0; }
-        .right-section { margin: 15px 25px 0 0; } */
         .model-number {
             font-size: 25px;
             margin-bottom: 8px;
@@ -57,13 +54,15 @@
         .subtitle {
             font-size: 30px;
             font-weight: bold;
+            text-align: right;
         }
 
-        .card-number {
+        .faculty-name {
             font-size: 24px;
             font-weight: bold;
             color: #000;
-            margin-right: 10px;
+            text-align: right;
+            /* margin-right: -5px; */
         }
 
         .notes-section {
@@ -83,23 +82,14 @@
         }
 
         th,
-        td {
+        td,
+        tr {
             font-weight: bold;
             border: 1px solid #000;
             padding: 5px;
             text-align: center;
             vertical-align: middle;
             font-size: 20px;
-        }
-
-        /* .table-first th {
-            background-color: #c0c0c0; 
-            background-color: #d3d3d3;
-          
-        } */
-
-        .main-header {
-            background-color: #c0c0c0;
         }
 
         .footer {
@@ -131,6 +121,12 @@
             font-size: 15px;
             margin-top: 10px;
         }
+
+        .note-subject1 {
+            font-weight: bold;
+            text-align: center;
+            font-size: 25px;
+        }
     </style>
 </head>
 
@@ -147,84 +143,70 @@
                 <div class="title">الجمهورية العربية السورية</div>
                 <div class="subtitle" style="margin: 3px 55px 0 0 ;">وزارة المالية</div>
             </div>
-            <div class="col-5" > 
-                <div class="subtitle">بطاقة مواد رقم</div>
-                <div class="card-number">{{ $bill->bill_number ?? '2001' }}</div>
+            <div class="col-5">
+                <div class="subtitle"> مذكرة {{ $bill ->type }} </div>
+                <!-- <div class="subtitle"> مذكرة استلام </div> -->
+                <div class="faculty-name">{{ $bill->destinationWarehouse ?? 'كلية الطب البشري'}}</div>
             </div>
-            <div class="col-2" >
+            <div class="col-2">
                 <div class="model-number"><strong>نموذج مستودع رقم (15)</strong></div>
-                <div class="item-line"><strong>اسم المادة:</strong> {{ $item?->name ?? 'ورق أبيض A4 غراماج' }}</div>
-                <div class="item-line"><strong>رمزها:</strong> {{ $item?->code ?? '1111' }}</div>
+                <div class="item-line"><strong>رقم المجلد :</strong> {{ $bill?->reference_number ?? 'ورق أبيض A4 غراماج' }}</div>
+                <div class="item-line"><strong>تاريخ المذكرة:</strong> {{ ($bill?->reference_date)->format('d/m/Y') ?? '1111' }}</div>
                 <div style="margin-top: 8px;">
-                    <div class="item-line"><strong>الحد الأدنى:</strong> {{ $item?->minimum_quantity ?? '0' }}</div>
-                    <div class="item-line"><strong>الحد الأقصى:</strong> {{ $item?->maximum_quantity ?? '0' }}</div>
-                    <div class="item-line"><strong>الوحدة:</strong> {{ $item?->unit ?? 'ربطة' }}</div>
+                    <div class="item-line"><strong>رقم :</strong> {{ $bill?->bill_number ?? '0' }}</div>
                 </div>
             </div>
         </div>
-        <table class="table-first">
-            <thead>
-                <tr class="main-header">
-                    <th>المؤسسة</th>
-                    <th>المركبة</th>
-                    <th>التاريخ الاستلام أو التسليم</th>
-                    <th>الجهة المسلمة أو المستلمة</th>
-                    <th>ملاحظات</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>{{ $bill->sourceWarehouse?->name ?? 'المستودع المركزي' }}</td>
-                    <td>{{ $bill->destinationWarehouse?->name ?? 'كلية الطب البشري' }}</td>
-                    <td>{{ \Carbon\Carbon::parse($bill->date)->format('d/m/Y') }}</td>
-                    <td>{{ $bill->party_name ?? $bill->supplier?->name ?? $bill->customer?->name ?? 'كلية الطب البشري / على علمي' }}</td>
-                    <td>{{ $bill->notes ?? '—' }}</td>
-                </tr>
-            </tbody>
-        </table>
+        <br />
+        <div class="note">
+            <p class="note-subject1">
+                إن المواد المذكورة أدناه وردت من مديرية الكتب بموجب الفاتورة رقم
+                {{ $bill?->bill_number ?? '0' }}
+                تاريخ {{ ($bill?->reference_date)->format('d/m/Y') ?? '1/1/2000' }}
+            </p>
+        </div>
 
-
-        <table class="table-first">
+        <table class="table table-bordered">
             <thead>
-                <tr class="main-header">
-                    <th>الرقم</th>
-                    <th>رقمه</th>
-                    <th>تاريخ الإخراج</th>
-                    <th>إدخالات</th>
-                    <th>إخراجات</th>
-                    <th>التنسيق</th>
+                <tr class="table-active">
+                    <th colspan="5"> المادة </th>
+                    <th scope="col" rowspan="2">الكمية المستلمة</th>
+                    <th scope="col" rowspan="2">السعر</th>
+                    <th scope="col" rowspan="2">القيمة</th>
+                    <th scope="col" rowspan="2">رقم البطاقة</th>
+                    <th scope="col" rowspan="2">ملاحظات</th>
+                </tr>
+                <tr class="table-active">
+                    <th scope="col">الرقم المتسلسل</th>
+                    <th scope="col">رمزها</th>
+                    <th scope="col">اسمها</th>
+                    <th scope="col">أوصافها</th>
+                    <th scope="col">وحدتها</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($bill->billRecords as $index => $record)
                 <tr>
-                    <td>{{ $index + 1 }}</td>
-                    <td>{{ $record->item?->code ?? $record->item_id }}</td>
-                    <td>{{ \Carbon\Carbon::parse($bill->date)->format('d/m/Y') }}</td>
-                    <td>{{ $record->quantity }}</td>
-                    <td>0</td>
-                    <td>{{ $record->quantity }}</td>
+                   <td>{{ $index + 1 }}</td>
+                    <td>{{ $item->code }}</td>
+                    <td>{{ $item->name }}</td>
+                    <td> ---- </td>
+                    <td>{{ $item->unit }}</td>
+                    <td> ---- </td>
+                    <td>{{ $item->sale_price }}</td>
+                    <td>--- </td>
+                    <td> ---- </td>
+                    <td> ---- </td>
                 </tr>
-                @empty
+                 @empty
                 <tr>
-                    <td colspan="6">لا توجد بيانات</td>
+                    <td colspan="10">لا توجد بيانات</td>
                 </tr>
                 @endforelse
             </tbody>
         </table>
 
-
-        <div class="footer">
-            <div class="signature-section">
-                <div class="signature-line"></div>
-                <div class="signature-label">التوقيع</div>
-            </div>
-        </div>
-
-        <div class="page-number">Page 1 of 1</div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

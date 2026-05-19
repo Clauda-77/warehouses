@@ -14,7 +14,7 @@ class RolePermissionSeeder extends Seeder
     public function run(): void
     {
 
-        User::create([
+        User::firstOrCreate([
             'username' => 'Test',
             'name' => 'Test User',
             'email' => 'test@example.com',
