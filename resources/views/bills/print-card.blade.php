@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>بطاقة مواد {{ $bill->bill_number ?? 'غير محدد' }}</title>
+    <title>بطاقة المذكرة {{ $bill->bill_number ?? 'غير محدد' }}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         @media print {
@@ -142,31 +142,31 @@
             <div class="col-5">
                 <div class="title">الجمهورية العربية السورية</div>
                 <div class="subtitle" style="margin: 3px 55px 0 0 ;">وزارة المالية</div>
-            </div>
-            <div class="col-5">
-                <div class="subtitle"> مذكرة {{ $bill ->type }} </div>
-                <!-- <div class="subtitle"> مذكرة استلام </div> -->
+            </div> <!-- end class col-5 -->
+            <div class="col-4">
+                <!-- <div class="subtitle"> مذكرة {{ $bill ->type }} </div> -->
+                <div class="subtitle"> مذكرة استلام </div>
                 <div class="faculty-name">{{ $bill->destinationWarehouse ?? 'كلية الطب البشري'}}</div>
-            </div>
-            <div class="col-2">
+            </div> <!-- end class col-5 -->
+            <div class="col-3">
                 <div class="model-number"><strong>نموذج مستودع رقم (15)</strong></div>
                 <div class="item-line"><strong>رقم المجلد :</strong> {{ $bill?->reference_number ?? 'ورق أبيض A4 غراماج' }}</div>
-                <div class="item-line"><strong>تاريخ المذكرة:</strong> {{ ($bill?->reference_date)->format('d/m/Y') ?? '1111' }}</div>
+                <div class="item-line"><strong>تاريخ المذكرة:</strong> {{ $bill && $bill->reference_date ? $bill->reference_date->format('d/m/Y') : '1111' }}</div>
                 <div style="margin-top: 8px;">
                     <div class="item-line"><strong>رقم :</strong> {{ $bill?->bill_number ?? '0' }}</div>
                 </div>
-            </div>
-        </div>
+            </div> <!-- end class col-2 -->
+        </div> <!-- end class row -->
         <br />
         <div class="note">
             <p class="note-subject1">
                 إن المواد المذكورة أدناه وردت من مديرية الكتب بموجب الفاتورة رقم
                 {{ $bill?->bill_number ?? '0' }}
-                تاريخ {{ ($bill?->reference_date)->format('d/m/Y') ?? '1/1/2000' }}
-            </p>
-        </div>
+                تاريخ {{ $bill && $bill->reference_date ? $bill->reference_date->format('d/m/Y') : '---' }}
+            </p> <!-- end class note-subject1 -->
+        </div> <!-- end class note -->
 
-        <table class="table table-bordered">
+        <table class="table table-bordered table-hover">
             <thead>
                 <tr class="table-active">
                     <th colspan="5"> المادة </th>
@@ -187,7 +187,7 @@
             <tbody>
                 @forelse($bill->billRecords as $index => $record)
                 <tr>
-                   <td>{{ $index + 1 }}</td>
+                    <td>{{ $index + 1 }}</td>
                     <td>{{ $item->code }}</td>
                     <td>{{ $item->name }}</td>
                     <td> ---- </td>
@@ -198,15 +198,25 @@
                     <td> ---- </td>
                     <td> ---- </td>
                 </tr>
-                 @empty
+                @empty
                 <tr>
                     <td colspan="10">لا توجد بيانات</td>
                 </tr>
                 @endforelse
             </tbody>
         </table>
+        <br />
+        <br />
+        <table class="table table-bordered foot-table table-hover" style="width: 50%; margin: 0 auto;">
+            <tr>
+                <td> المجاميع القيمة: </td>
+                <td style="width: 75%;"> {{ $item->sale_price ?? " 0000" }} </td>
+                <td style="width: 5%;"> ل.س </td>
+            </tr>
+        </table>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    </div> <!-- end class containerr-->
 </body>
 
 </html>

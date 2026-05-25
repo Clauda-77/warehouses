@@ -3,8 +3,9 @@
 namespace App\Filament\Widgets;
 
 use App\Models\Bill;
-use App\Models\Customer;
+// use App\Models\Customer;
 use App\Models\Item;
+use App\Models\Supplier;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 
@@ -19,8 +20,8 @@ class DashboardWidget extends BaseWidget
                 ->chart([15, 30, 22, 40, 25, 50])
                 ->color('warning'),
 
-            stat::make(' الزبائن:', Customer::count())
-                ->description('الزبائن.')
+            stat::make(' الموردين:', Supplier::count())
+                ->description('الموردين.')
                 ->descriptionIcon('heroicon-o-user')
                 ->chart([10, 30, 33, 20, 15, 40])
                 ->color('success'),
