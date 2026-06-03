@@ -17,7 +17,7 @@ use Flowframe\Trend\TrendValue;
 //         $data = Trend::model(Item::class)
 //             ->between(
 //                 start: now()->startOfYear(),
-//                 end: now()endOfYear(),
+//                 end: now()->endOfYear(),
 //             )
 //             ->perMonth()
 //             ->count();

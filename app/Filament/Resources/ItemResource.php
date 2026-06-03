@@ -39,9 +39,11 @@ class ItemResource extends Resource
                     ->schema(components: [
                         Forms\Components\TextInput::make('code')
                             ->required()
+                            ->label('الرمز')
                             ->maxLength(255),
                         Forms\Components\TextInput::make('name')
                             ->required()
+                            ->label('اسم المادة')
                             ->maxLength(255),
                         Forms\Components\TextInput::make('minimum_quantity')
                             ->required()
@@ -62,6 +64,7 @@ class ItemResource extends Resource
                         Forms\Components\TextInput::make('unit')
                             ->required()
                             ->maxLength(255)
+                            ->label('الوحدة')
                             ->columnSpan(2),
                         Forms\Components\Toggle::make('is_active')
                             ->required()
@@ -106,14 +109,17 @@ class ItemResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('code')
-                    ->searchable(),
+                    ->searchable()
+                    ->label('الرمز'),
                 Tables\Columns\TextColumn::make('name')
-                    ->searchable(),
+                    ->searchable()
+                     ->label('اسم المادة'),
                 Tables\Columns\TextColumn::make('category_id')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('unit')
-                    ->searchable(),
+                    ->searchable()
+                    ->label('الوحدة'),
                 Tables\Columns\TextColumn::make('purchase_price')
                     ->numeric()
                     ->sortable(),
@@ -131,20 +137,25 @@ class ItemResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('current_quantity')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->label('الكمية الحالية'),
                 Tables\Columns\TextColumn::make('reserved_quantity')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->label('الكمية المحجوزة'),
                 Tables\Columns\TextColumn::make('barcode')
-                    ->searchable(),
+                    ->searchable()
+                    ->label ('باركود'),
                 Tables\Columns\IconColumn::make('is_active')
                     ->boolean(),
                 Tables\Columns\TextColumn::make('created_by')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('last_updated_by')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
