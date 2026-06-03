@@ -183,7 +183,7 @@ class MigrateOldDataSeeder extends Seeder
     {
         $this->command->info('🚀 بدء ترحيل البيانات من ملف data.txt...');
 
-        // 1. الإعدادات الأساسية
+
         $admin = User::firstOrCreate(['username' => 'admin'], ['name' => 'Admin', 'email' => 'admin@example.com']);
         $warehouse = Warehouse::firstOrCreate(['code' => 'MAIN'], ['name' => 'المستودع الرئيسي', 'type' => 'central', 'is_active' => true]);
         $category = Category::firstOrCreate(['code' => 'IMPORTED'], ['name' => 'بيانات مستوردة', 'is_active' => true]);
@@ -194,11 +194,9 @@ class MigrateOldDataSeeder extends Seeder
             return;
         }
 
-        // قراءة الملف بالكامل للتعامل مع حالات السطور المتعددة
         $fileContent = file_get_contents($filePath);
 
-        // استخدام Regex للبحث عن جمل INSERT المتعلقة بالجدول DETBILCST
-        // هذا النمط يلتقط كل شيء بين INSERT INTO و ; (نهاية الأمر)
+
         $pattern = '/INSERT\s+INTO\s+"DETBILCST".*?VALUES\s*\((.*?)\);/s';
 
         if (!preg_match_all($pattern, $fileContent, $matches)) {
@@ -211,39 +209,29 @@ class MigrateOldDataSeeder extends Seeder
         $bills = [];
         $records = [];
 
-        // معالجة كل نتيجة تم العثور عليها
-        foreach ($matches[1] as $valuesString) {
+         foreach ($matches[1] as $valuesString) {
 
-            // فحص بسيط: هل القيم هي placeholders (:1)؟
-            if (strpos($valuesString, ':') !== false && strpos($valuesString, ':1') !== false) {
-                // إذا وجدنا :1 فهذا يعني أن القيم غير موجودة نصياً (ملف Binary)
-                // يمكننا التوقف هنا أو تجاهل هذه السجلات
+             if (strpos($valuesString, ':') !== false && strpos($valuesString, ':1') !== false) {
+
                 $this->command->warn("⚠️ تم العثور على بيانات بصيغة Binary (:1, :2...) لا يمكن استخراجها برمجياً.");
-                // سنفترض أن المستخدم أدخل بيانات حقيقية إذا وصل لهنا
-                // return; // يمكنك إزالة التعليق للتوقف إذا وجدت مكاناً واحداً فقط
+
                 continue;
             }
 
-            // استخراج القيم عن طريق فصل الفواصل (مع تجاهل الفواصل بين علامات التنصيص)
-            $values = $this->parseSqlValues($valuesString);
+             $values = $this->parseSqlValues($valuesString);
 
-            // التأكد من عدد الأعمدة (يجب أن يكون 20 حسب هيكل الجدول الأصلي)
-            if (count($values) < 16) continue;
+             if (count($values) < 16) continue;
 
-            // تعيين المتغيرات حسب ترتيب الجدول DETBILCST
-            // الترتيب: BILDATE, BILNO, SERIALNO, PRTNO, PRTNAME, DESCRIPTION, PRICE, QUANTITE, WIHDA...
-            // Index: 0       1      2         3      4        5           6      7         8
-
-            $bilno = $values[1] ?? null;      // رقم الفاتورة (Index 1)
-            $prtno = $values[3] ?? null;      // رقم المنتج (Index 3)
-            $prtname = $values[4] ?? 'غير معروف'; // اسم المنتج
-            $price = floatval($values[6] ?? 0); // السعر
+            $bilno = $values[1] ?? null;
+            $prtno = $values[3] ?? null;
+            $prtname = $values[4] ?? 'غير معروف';
+            $price = floatval($values[6] ?? 0);
             $qty = floatval($values[7] ?? 0); // الكمية
             $unit = $values[8] ?? 'قطعة';      // الوحدة
             $jiha = $values[15] ?? 'المستودع'; // الجهة (Index 15)
 
             if ($bilno && $prtno) {
-                // تجميع الأصناف
+
                 if (!isset($items[$prtno])) {
                     $items[$prtno] = [
                         'code' => $prtno,
@@ -252,16 +240,14 @@ class MigrateOldDataSeeder extends Seeder
                     ];
                 }
 
-                // تجميع الفواتير
-                if (!isset($bills[$bilno])) {
+                 if (!isset($bills[$bilno])) {
                     $bills[$bilno] = [
                         'number' => $bilno,
                         'warehouse' => $jiha,
                     ];
                 }
 
-                // تجميع التفاصيل
-                $records[] = [
+                 $records[] = [
                     'bilno' => $bilno,
                     'prtno' => $prtno,
                     'qty' => $qty,
@@ -280,7 +266,7 @@ class MigrateOldDataSeeder extends Seeder
             return;
         }
 
-        // 3. إدراج البيانات في قاعدة البيانات
+
         DB::beginTransaction();
         try {
             $itemIds = [];
@@ -354,9 +340,6 @@ class MigrateOldDataSeeder extends Seeder
         }
     }
 
-    /**
-     * دالة مساعدة لتقسيم قيم SQL مع مراعاة النصوص المحصورة بين علامات التنصيص
-     */
     private function parseSqlValues($str)
     {
         $values = [];
@@ -371,14 +354,14 @@ class MigrateOldDataSeeder extends Seeder
                 $inQuotes = !$inQuotes;
                 $current .= $char;
             } elseif ($char === ',' && !$inQuotes) {
-                // فصل عند الفاصلة فقط إذا لم نكن داخل علامات تنصيص
+
                 $values[] = trim($current);
                 $current = '';
             } else {
                 $current .= $char;
             }
         }
-        // إضافة آخر قيمة
+
         $values[] = trim($current);
 
         return $values;

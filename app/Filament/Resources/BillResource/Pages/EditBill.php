@@ -18,12 +18,12 @@ class EditBill extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\Action::make('add_items')
-                ->label('➕ إضافة/تعديل مواد')
-                ->icon('heroicon-o-shopping-cart')
-                ->color('primary')
-                ->url(fn () => BillResource::getUrl('items', ['record' => $this->record->id])), // غير 'add-items' إلى 'items'
-                
+//            Actions\Action::make('add_items')
+//                ->label('➕ إضافة/تعديل مواد')
+//                ->icon('heroicon-o-shopping-cart')
+//                ->color('primary')
+//                ->url(fn () => BillResource::getUrl('items', ['record' => $this->record->id])), // غير 'add-items' إلى 'items'
+
             Actions\Action::make('approve')
                 ->label('اعتماد')
                 ->icon('heroicon-o-check-circle')
@@ -56,4 +56,3 @@ class EditBill extends EditRecord
     }
 }
 
- 

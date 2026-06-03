@@ -24,16 +24,16 @@ class ViewBill extends ViewRecord
                 ->url(fn() => route('bill.pdf', $this->record->id))
                 ->openUrlInNewTab(),
 
-            Actions\Action::make('add_items')
-                ->label('➕ إضافة/تعديل مواد')
-                ->icon('heroicon-o-shopping-cart')
-                ->color('primary')
-                ->url(fn() => BillResource::getUrl('items', ['record' => $this->record->id])),
+//            Actions\Action::make('add_items')
+//                ->label('➕ إضافة/تعديل مواد')
+//                ->icon('heroicon-o-shopping-cart')
+//                ->color('primary')
+//                ->url(fn() => BillResource::getUrl('items', ['record' => $this->record->id])),
         ];
     }
 
 
- 
+
 
     public function getContent()
     {
@@ -41,4 +41,4 @@ class ViewBill extends ViewRecord
             'bill' => $this->record,
         ]);
     }
-} 
+}

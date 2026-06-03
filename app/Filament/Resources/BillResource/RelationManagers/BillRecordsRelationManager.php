@@ -158,7 +158,8 @@ class BillRecordsRelationManager extends RelationManager
                     ->modalHeading('إضافة مادة جديدة')
                     ->modalSubmitActionLabel('إضافة')
                     ->modalCancelActionLabel('إلغاء')
-                    ->visible(fn () => $this->ownerRecord->status === BillStatus::DRAFT->value)
+                    ->visible(fn () => true)
+                    // ->visible(fn () => $this->ownerRecord->status === BillStatus::DRAFT->value)
                     ->mutateFormDataUsing(function (array $data): array {
                         $data['warehouse_id'] = $this->getWarehouseId();
                         $data['unit'] = 'عدد';
