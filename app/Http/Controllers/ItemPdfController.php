@@ -12,29 +12,29 @@ class ItemPdfController extends Controller
  public function generate($id)
     {
         $item = Item::findOrFail($id);
-        
-        $transactions = BillRecord::with(['bill.supplier', 'bill.customer'])
+
+        $transactions = BillRecord::with(['bill.supplier'])
             ->where('item_id', $id)
             ->orderBy('created_at', 'asc')
             ->get();
-        
+
         $movements = [];
         $balance = $item->opening_balance ?? 0;
-        
+
         foreach ($transactions as $record) {
             $bill = $record->bill;
             if (!$bill) continue;
-            
+
             $quantity = (float)$record->quantity;
             $in = 0;
             $out = 0;
             $party = '';
             $documentTypeAr = '';
-            
+
             switch ($bill->type) {
                 case 'purchase':
                     $in = $quantity;
-         
+
                     $party = $bill->supplier?->name ?? $bill->party_name ?? 'مورد غير محدد';
                     $documentTypeAr = 'شراء';
                     break;
@@ -58,11 +58,11 @@ class ItemPdfController extends Controller
                     $party = $bill->party_name ?? 'حركة أخرى';
                     $documentTypeAr = 'أخرى';
             }
-            
+
             $balance += ($in - $out);
-         
+
 $movements[] = [
-    
+
     'date'            => $record->created_at->format('Y-m-d'),
     'party'           => $party,
     'in'              => $in,
@@ -71,7 +71,7 @@ $movements[] = [
     'document_type'   => $documentTypeAr,
     'notes'           => $bill->notes ?? $record->notes ?? '',
 ];
- 
+
             // $movements[] = [
             //     'date'            => $record->created_at->format('Y-m-d'),
             //     'party'           => $party,
@@ -79,13 +79,13 @@ $movements[] = [
             //     'out'             => $out,
             //     'balance'         => $balance,
             //     'document_number' => $bill->bill_number,
-            //     'document_type'   => $documentTypeAr,  
+            //     'document_type'   => $documentTypeAr,
             //     'notes'           => $bill->notes ?? $record->notes ?? '',
             // ];
         }
-        
+
         $html = view('items.print-card', compact('item', 'movements'))->render();
-        
+
         $mpdf = new Mpdf([
             'mode'          => 'utf-8',
             'format'        => 'A4',
@@ -100,18 +100,18 @@ $movements[] = [
             'simpleTables'  => true,
             'packTableData' => true,
         ]);
-        
+
         $mpdf->WriteHTML($html);
         return $mpdf->Output('بطاقة_مادة_' . $item->code . '.pdf', 'I');
     }
 
-    
+
     public function generate0($id)
     {
-     
+
         $item = Item::with(['category'])->findOrFail($id);
 
-  
+
         $transactions = BillRecord::with([
             'bill.supplier',
             'bill.customer',
@@ -134,17 +134,17 @@ $movements[] = [
             $out = 0;
             $party = '';
 
-           
+
             switch ($bill->type) {
-                case 'purchase':  
+                case 'purchase':
                     $in = $quantity;
                     $party = $bill->supplier?->name ?? 'مورد';
                     break;
-                case 'sale':  
+                case 'sale':
                     $out = $quantity;
                     $party = $bill->customer?->name ?? 'عميل';
                     break;
-                case 'transfer':  
+                case 'transfer':
                     if ($bill->destination_warehouse_id) {
                         $in = $quantity;
                         $party = 'تحويل من ' . ($bill->sourceWarehouse?->name ?? '') . ' إلى ' . ($bill->destinationWarehouse?->name ?? '');
@@ -172,10 +172,10 @@ $movements[] = [
             ];
         }
 
- 
+
         $html = view('items.print-card', compact('item', 'movements'))->render();
 
- 
+
     $mpdf = new Mpdf([
     'mode' => 'utf-8',
     'format' => 'A4',
@@ -186,7 +186,7 @@ $movements[] = [
     'margin_top' => 15,
     'margin_bottom' => 15,
     'margin_left' => 15,
-    'margin_right' => 15, 
+    'margin_right' => 15,
     'useSubstitutions' => false,
     'simpleTables' => true,
     'packTableData' => true,
