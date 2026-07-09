@@ -26,8 +26,7 @@ return new class extends Migration
             $table->string('type')->default(BillType::PURCHASE->value);
             $table->string('status')->default(BillStatus::DRAFT->value);
              $table->foreignId('supplier_id')->nullable()->constrained('suppliers');
-            $table->foreignId('customer_id')->nullable()->constrained('customers');
-            $table->string('party_name')->nullable();  //   ACCNAME
+             $table->string('party_name')->nullable();  //   ACCNAME
             
              $table->foreignId('source_warehouse_id')->nullable()->constrained('warehouses'); 
             $table->foreignId('destination_warehouse_id')->nullable()->constrained('warehouses');  
