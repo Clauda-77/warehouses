@@ -104,11 +104,11 @@ class BillResource extends Resource
                 \Filament\Tables\Actions\ViewAction::make(),
                 \Filament\Tables\Actions\EditAction::make(),
 
-                \Filament\Tables\Actions\Action::make('manage_items')
-                    ->label('إضافة/تعديل مواد')
-                    ->icon('heroicon-o-shopping-cart')
-                    ->color('primary')
-                    ->url(fn($record) => BillResource::getUrl('items', ['record' => $record])),
+//                \Filament\Tables\Actions\Action::make('manage_items')
+//                    ->label('إضافة/تعديل مواد')
+//                    ->icon('heroicon-o-shopping-cart')
+//                    ->color('primary')
+//                    ->url(fn($record) => BillResource::getUrl('items', ['record' => $record])),
 
                 \Filament\Tables\Actions\Action::make('approve')
                     ->label('اعتماد')
@@ -165,8 +165,7 @@ class BillResource extends Resource
     {
         return [
             BillRecordsRelationManager::class,
-//            RelationManager::make('billRecords', BillRecordsRelationManager::class),
-        ];
+         ];
     }
 
     public static function getNavigationItems(): array
@@ -211,7 +210,6 @@ class BillResource extends Resource
             'create' => Pages\CreateBill::route('/create'),
             'edit' => Pages\EditBill::route('/{record}/edit'),
             'view' => Pages\ViewBill::route('/{record}'),
-            'items' => Pages\ManageBillItems::route('/{record}/items'),
         ];
     }
 }

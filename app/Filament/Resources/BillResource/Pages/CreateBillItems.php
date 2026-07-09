@@ -18,7 +18,7 @@ class CreateBillItems extends Page
 {
     protected static string $resource = BillResource::class;
     protected static string $view = 'filament.resources.bill-resource.pages.create-bill-items';
-    
+
     public Bill $bill;
     public array $items = [];
     public int $itemCount = 0;
@@ -26,8 +26,8 @@ class CreateBillItems extends Page
     public function mount($bill): void
     {
         $this->bill = Bill::findOrFail($bill);
-        
-     
+
+
         $this->addItem();
     }
 
@@ -51,20 +51,20 @@ class CreateBillItems extends Page
                                         ->reactive()
                                         ->afterStateUpdated(function ($state, callable $set) {
                                             if ($state && $item = Item::find($state)) {
-                                                $set('item_code', $item->code);
+                                                $set('code', $item->code);
                                                 $set('unit', $item->unit);
                                                 $set('unit_price', $item->sale_price);
                                                 $set('batch_number', 'BATCH-' . date('Ymd'));
                                             }
                                         })
                                         ->columnSpan(3),
-                                    
+
                                     Forms\Components\TextInput::make('item_code')
                                         ->label('كود المادة')
                                         ->disabled()
                                         ->dehydrated()
                                         ->columnSpan(1),
-                                    
+
                                     Forms\Components\TextInput::make('quantity')
                                         ->label('الكمية')
                                         ->numeric()
@@ -73,20 +73,20 @@ class CreateBillItems extends Page
                                         ->step(0.01)
                                         ->default(1)
                                         ->columnSpan(1),
-                                    
+
                                     Forms\Components\TextInput::make('unit')
                                         ->label('الوحدة')
                                         ->disabled()
                                         ->dehydrated()
                                         ->columnSpan(1),
-                                    
+
                                     Forms\Components\TextInput::make('unit_price')
                                         ->label('سعر الوحدة')
                                         ->numeric()
                                         ->required()
                                         ->minValue(0)
                                         ->columnSpan(1),
-                                    
+
                                     Forms\Components\TextInput::make('total_price')
                                         ->label('القيمة')
                                         ->numeric()
@@ -126,13 +126,13 @@ class CreateBillItems extends Page
     public function saveItems(): void
     {
         $data = $this->form->getState();
-        
+
         if (isset($data['items'])) {
             foreach ($data['items'] as $itemData) {
                 if (!empty($itemData['item_id'])) {
-                   
+
                     $totalPrice = ($itemData['quantity'] ?? 0) * ($itemData['unit_price'] ?? 0);
-                
+
                     BillRecord::create([
                         'bill_id' => $this->bill->id,
                         'item_id' => $itemData['item_id'],
@@ -147,16 +147,16 @@ class CreateBillItems extends Page
                     ]);
                 }
             }
-            
-      
+
+
             $this->updateBillTotals();
-            
+
             Notification::make()
                 ->title('تم إضافة المواد بنجاح')
                 ->success()
                 ->send();
-            
-         
+
+
             $this->redirect(BillResource::getUrl('edit', ['record' => $this->bill->id]));
         }
     }
@@ -172,14 +172,14 @@ class CreateBillItems extends Page
 
     private function getStockBefore($itemId): float
     {
-      
-        return 0; 
+
+        return 0;
     }
 
     private function calculateStockAfter($itemId, $quantity): float
     {
         $stockBefore = $this->getStockBefore($itemId);
-        
+
         return match($this->bill->type) {
             BillType::PURCHASE->value, BillType::RETURN->value => $stockBefore + $quantity,
             BillType::TRANSFER->value, BillType::ADJUSTMENT->value => $stockBefore - $quantity,
@@ -190,7 +190,7 @@ class CreateBillItems extends Page
     private function updateBillTotals(): void
     {
         $subtotal = BillRecord::where('bill_id', $this->bill->id)->sum('total_price');
-        
+
         $this->bill->update([
             'subtotal' => $subtotal,
             'total' => $subtotal - $this->bill->discount + $this->bill->tax,
@@ -205,7 +205,7 @@ class CreateBillItems extends Page
                 ->action('saveItems')
                 ->color('primary')
                 ->icon('heroicon-o-check'),
-                
+
             Action::make('cancel')
                 ->label('إلغاء')
                 ->url(BillResource::getUrl('edit', ['record' => $this->bill->id]))
