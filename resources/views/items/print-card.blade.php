@@ -84,6 +84,14 @@
         .containerr {
             margin: 0.5%;
         }
+        .card-title,
+        .card-number{
+    font-weight: bold;
+    font-size: 20px;
+        }
+        .notes-for-item{
+            margin-right: 160px;
+        }
     </style>
 </head>
 
@@ -92,13 +100,14 @@
         <table class="table table-bordered table-hover">
             <thead>
                 <tr>
-                    <th class="col-5">
+                    <th class="col-4">
                         <div class="title">الجمهورية العربية السورية</div>
                         <div class="subtitle">وزارة المالية</div>
                     </th>
-                    <th class="col-4">
+                    <th class="col-5">
                         <div class="card-title">بطاقة مواد رقم</div>
                         <div class="card-number" style="margin-right: 15rem;">{{ $item->code }}</div>
+                        
                     </th>
                     <th class="col-3">
                         <div><strong>نموذج مستودع رقم (١٥)</strong></div>
@@ -111,7 +120,7 @@
                 </tr>
             </thead>
         </table>
-        <br />
+          <div class="notes-for-item">ملاحظات: </div>
         <table class="movements-table">
             <thead>
                 <tr class="item-table-row">
@@ -175,6 +184,7 @@
 
         <div class="footer">
             <div class="signature">التوقيع</div>
+            <br>
             <div class="print-date">تاريخ الطباعة: {{ now()->format('H:i d/m/Y') }}</div>
         </div> <!-- end class footer-->
 

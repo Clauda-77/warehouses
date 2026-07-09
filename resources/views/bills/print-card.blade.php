@@ -125,7 +125,19 @@
         .note-subject1 {
             font-weight: bold;
             text-align: center;
+            font-size: 22px;
+        }
+
+        .footer {
+            text-align: right;
+            font-weight: bold;
             font-size: 25px;
+            margin-right: 3rem;
+            width: 100%;
+
+        }
+        .names{
+            margin-right: 20rem;
         }
     </style>
 </head>
@@ -143,26 +155,33 @@
                 <div class="title">الجمهورية العربية السورية</div>
                 <div class="subtitle" style="margin: 3px 55px 0 0 ;">وزارة المالية</div>
             </div> <!-- end class col-5 -->
-            <div class="col-4">
-                <!-- <div class="subtitle"> مذكرة {{ $bill ->type }} </div> -->
-                <div class="subtitle"> مذكرة استلام </div>
-                <div class="faculty-name">{{ $bill->destinationWarehouse ?? 'كلية الطب البشري'}}</div>
-            </div> <!-- end class col-5 -->
+
             <div class="col-3">
+                <div class="subtitle"> مذكرة {{ $bill ->type }} </div>
+                <!-- <div class="subtitle"> مذكرة استلام </div> -->
+                <div class="faculty-name">{{ $bill->destinationWarehouse ?? ' كلية الطب البشري '}}</div>
+            </div> <!-- end class col-3 -->
+
+            <div class="col-2">
+                <div class="item-line" style="margin-top: 30px;"><strong>{{ $bill?->bill_number ?? '0' }}</strong></div>
+            </div> <!-- end class col-2 -->
+
+
+            <div class="col-2">
                 <div class="model-number"><strong>نموذج مستودع رقم (15)</strong></div>
-                <div class="item-line"><strong>رقم المجلد :</strong> {{ $bill?->reference_number ?? 'ورق أبيض A4 غراماج' }}</div>
-                <div class="item-line"><strong>تاريخ المذكرة:</strong> {{ $bill && $bill->reference_date ? $bill->reference_date->format('d/m/Y') : '1111' }}</div>
                 <div style="margin-top: 8px;">
-                    <div class="item-line"><strong>رقم :</strong> {{ $bill?->bill_number ?? '0' }}</div>
+                    <div class="item-line"><strong>رقم :</strong></div>
                 </div>
             </div> <!-- end class col-2 -->
+
+
         </div> <!-- end class row -->
         <br />
         <div class="note">
             <p class="note-subject1">
-                إن المواد المذكورة أدناه وردت من مديرية الكتب بموجب الفاتورة رقم
-                {{ $bill?->bill_number ?? '0' }}
-                تاريخ {{ $bill && $bill->reference_date ? $bill->reference_date->format('d/m/Y') : '---' }}
+                إن المواد المذكورة أدناه وردت من <sapn class="note-subject1" style="margin-right: 10rem;">التاريخ </sapn> <span style="margin-right: 2rem;">/</span> <span style="margin-right: 2rem;">/</span> <span style="margin-right: 1rem;">202 </span> <br>
+                بموجب الفاتورة رقم <sapn class="note-subject1" style="margin-right: 8rem;">تاريخ</sapn>
+                </sapn> <span style="margin-right: 2rem;">/</span> <span style="margin-right: 2rem;">/</span> <span style="margin-right: 1rem;">202 </span>
             </p> <!-- end class note-subject1 -->
         </div> <!-- end class note -->
 
@@ -187,7 +206,7 @@
             <tbody>
                 @forelse($bill->billRecords as $index => $record)
                 <tr>
-                    <td>{{ $index + 1 }}</td>
+                    <td></td>
                     <td>{{ $item->code }}</td>
                     <td>{{ $item->name }}</td>
                     <td> ---- </td>
@@ -215,8 +234,35 @@
             </tr>
         </table>
 
+        <div class="footer">
+            <p>فقــط كميــة قدرهــا .................... وقيمتهــا مبلــغ ....................<p>
+            
+            <span>تم استـلام المـواد المبينـة أعـلاه وفقـاً للمواصفـات المـحددة فـي .................... رقــم .................... تاريــخ</span> 
+            <span style="margin-right: 4rem;">/</span> <span style="margin-right: 2rem;">/</span> <span style="margin-right: 1rem;">202 </span> <br>
+            
+            <p style="margin-top: 15px;">ويـجري استلامهــا فــي .................... وتــم تسجيلهــا فـي بطاقـات المســتودع المشــار إليهــا</p>
+            <br>
+        <div class="row names">
+            <div class="col-6">
+                <p>المسلــم: </p>
+                <p>الاسم : </p>
+                <p> التوقيع: </p>
+            </div> <!-- end class col-6 -->
+
+            <div class="col-6">
+                <p>أمــين المســتودع المستلــم</p>
+                <p>الاسم : </p>
+                <p>التوقيع : </p>
+            </div> <!-- end class col-6 -->
+
+        </div> <!--end class footer -->
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     </div> <!-- end class containerr-->
 </body>
 
 </html>
+
+
+
+        </div> <!-- end class row -->

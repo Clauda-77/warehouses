@@ -18,7 +18,7 @@ class ViewBill extends ViewRecord
             Actions\EditAction::make(),
 
             Action::make('print')
-                ->label('طباعة الفاتورة')
+                ->label('طباعة المذكرة')
                 ->icon('heroicon-o-printer')
                 ->color('success')
                 ->url(fn() => route('bill.pdf', $this->record->id))
