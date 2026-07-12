@@ -6,7 +6,7 @@ use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use App\Models\User;
-use App\Models\Warehouse; // استدعاء موديل المخزن
+use App\Models\Warehouse;  
 use App\Enums\UserRole;
 
 class RolePermissionSeeder extends Seeder

@@ -72,16 +72,7 @@ $movements[] = [
     'notes'           => $bill->notes ?? $record->notes ?? '',
 ];
 
-            // $movements[] = [
-            //     'date'            => $record->created_at->format('Y-m-d'),
-            //     'party'           => $party,
-            //     'in'              => $in,
-            //     'out'             => $out,
-            //     'balance'         => $balance,
-            //     'document_number' => $bill->bill_number,
-            //     'document_type'   => $documentTypeAr,
-            //     'notes'           => $bill->notes ?? $record->notes ?? '',
-            // ];
+        
         }
 
         $html = view('items.print-card', compact('item', 'movements'))->render();

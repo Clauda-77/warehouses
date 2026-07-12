@@ -203,26 +203,31 @@
                     <th scope="col">وحدتها</th>
                 </tr>
             </thead>
-           <tbody>
-                @forelse($bill->billRecords as $index => $record)
-                <tr>
-                    <td>{{ $index + 1 }}</td>
-                    <td>{{ $item->code }}</td>
-                    <td>{{ $item->name }}</td>
-                    <td> ---- </td>
-                    <td>{{ $item->unit }}</td>
-                    <td> ---- </td>
-                    <td>{{ $item->sale_price }}</td>
-                    <td>--- </td>
-                    <td> ---- </td>
-                    <td> ---- </td>
-                </tr>
+
+            @php
+                     $grouped = $bill->billRecords->groupBy('item_id');
+            @endphp
+
+            <tbody>
+                @forelse($grouped as $itemId => $records)
+                    @php $item = $records->first()->item; @endphp
+                    <tr>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $item->code ?? '---' }}</td>
+                        <td>{{ $item->name ?? '---' }}</td>
+                        <td>----</td>
+                        <td>{{ $item->unit ?? '---' }}</td>
+                        <td>{{ $records->sum('quantity') }}</td>
+                        <td>{{ $item->sale_price ?? '---' }}</td>
+                        <td>{{ $records->sum('total') }}</td>
+                        <td>----</td>
+                        <td>----</td>
+                    </tr>
                 @empty
-                <tr>
-                    <td colspan="10">لا توجد بيانات</td>
-                </tr>
+                    <tr><td colspan="10">لا توجد بيانات</td></tr>
                 @endforelse
             </tbody>
+     
         </table>
         <br />
         <br />
