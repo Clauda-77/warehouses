@@ -203,38 +203,80 @@
                     <th scope="col">وحدتها</th>
                 </tr>
             </thead>
-           <tbody>
-                @forelse($bill->billRecords as $index => $record)
-                <tr>
-                    <td>{{ $index + 1 }}</td>
-                    <td>{{ $item->code }}</td>
-                    <td>{{ $item->name }}</td>
-                    <td> ---- </td>
-                    <td>{{ $item->unit }}</td>
-                    <td> ---- </td>
-                    <td>{{ $item->sale_price }}</td>
-                    <td>--- </td>
-                    <td> ---- </td>
-                    <td> ---- </td>
-                </tr>
+
+            @php
+                     $grouped = $bill->billRecords->groupBy('item_id');
+            @endphp
+<tbody>
+    @forelse($bill->billRecords as $index => $record)
+        @php $item = $record->item; @endphp
+        <tr>
+            <td>{{ $index + 1 }}</td>
+            <td>{{ $item->code ?? '---' }}</td>
+            <td>{{ $item->name ?? '---' }}</td>
+            <td>----</td>
+            <td>{{ $item->unit ?? '---' }}</td>
+            <td>{{ number_format($record->quantity, 2) }}</td>
+            <td>{{ number_format($record->unit_price, 2) }}</td>
+            <td>{{ number_format($record->total_price, 2) }}</td>
+            <td>{{ $record->batch_number ?? '----' }}</td>
+            <td>{{ $record->notes ?? '----' }}</td>
+        </tr>
+    @empty
+        <tr><td colspan="10">لا توجد بيانات</td></tr>
+    @endforelse
+</tbody>
+            <!-- <tbody>
+                @forelse($grouped as $itemId => $records)
+                    @php $item = $records->first()->item; @endphp
+                    <tr>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $item->code ?? '---' }}</td>
+                        <td>{{ $item->name ?? '---' }}</td>
+                        <td>----</td>
+                        <td>{{ $item->unit ?? '---' }}</td>
+                        <td>{{ $records->sum('quantity') }}</td>
+                        <td>{{ $item->sale_price ?? '---' }}</td>
+                        <td>{{ $records->sum('total') }}</td>
+                        <td>----</td>
+                        <td>----</td>
+                    </tr>
                 @empty
-                <tr>
-                    <td colspan="10">لا توجد بيانات</td>
-                </tr>
+                    <tr><td colspan="10">لا توجد بيانات</td></tr>
                 @endforelse
-            </tbody>
+            </tbody> -->
+
+     
         </table>
         <br />
         <br />
+            @php
+                $totalValue = $bill->billRecords->sum('total_price');
+                $totalQuantity = $bill->billRecords->sum('quantity');
+            @endphp
 
-
+            <table class="table table-bordered foot-table table-hover" style="width: 50%; margin: 0 auto;">
+                <tr>
+                    <td> المجاميع القيمة: </td>
+                    <td style="width: 75%;"> {{ number_format($totalValue, 2) }} </td>
+                    <td style="width: 5%;"> ل.س </td>
+                </tr>
+                @if($totalQuantity > 0)
+                <tr>
+                    <td> إجمالي الكمية: </td>
+                    <td style="width: 75%;"> {{ number_format($totalQuantity, 2) }} </td>
+                    <td style="width: 5%;"> وحدة </td>
+                </tr>
+                @endif
+            </table>
+<!-- 
            <table class="table table-bordered foot-table table-hover" style="width: 50%; margin: 0 auto;">
                <tr>
                    <td> المجاميع القيمة: </td>
                    <td style="width: 75%;"> {{ $item->sale_price  ?? " 0000" }}  </td>
                    <td style="width: 5%;"> ل.س </td>
                </tr>
-           </table>
+           </table> -->
 
            <div class="footer">
                <p>فقــط كميــة قدرهــا .................... وقيمتهــا مبلــغ ....................
