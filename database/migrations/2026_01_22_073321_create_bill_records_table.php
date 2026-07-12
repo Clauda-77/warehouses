@@ -25,6 +25,8 @@ return new class extends Migration
             
  
             $table->decimal('cost_price', 15, 2)->nullable();
+            $table->decimal('serial_number', 15, 2)->nullable();
+            $table->decimal('financial_number', 15, 2)->nullable();
            
             $table->decimal('stock_before', 15, 2)->default(0);
             $table->decimal('stock_after', 15, 2)->default(0);

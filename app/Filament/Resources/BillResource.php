@@ -3,14 +3,11 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\BillResource\Pages;
-
-
 use App\Filament\Resources\BillResource\RelationManagers\BillRecordsRelationManager;
 use App\Models\Bill;
 use App\Enums\BillType;
 use App\Enums\BillStatus;
 use Filament\Tables\Grouping\Group;
-//use Filament\Forms\Components\Group;
 use Filament\Navigation\NavigationItem;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -19,6 +16,11 @@ use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\Filter;
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\ToggleButtons; // مكون الأزرار الجديد
+use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Notifications\Notification;
@@ -38,10 +40,12 @@ class BillResource extends Resource
     {
         return $form;
     }
+
     public static function getGlobalSearchEloquentQuery(): Builder
     {
         return parent::getGlobalSearchEloquentQuery()->select(['id', 'bill_number', 'date', 'party_name', 'total', 'status']);
     }
+
     public static function table(Table $table): Table
     {
         return $table
@@ -90,25 +94,110 @@ class BillResource extends Resource
                     ->sortable(),
             ])
             ->filters([
-                SelectFilter::make('status')
-                    ->label('حالة المذكرة')
-                    ->options([
-                        BillStatus::DRAFT->value => 'مسودة',
-                        BillStatus::PENDING->value => 'معلقة',
-                        BillStatus::COMPLETED->value => 'مكتملة',
-                        BillStatus::CANCELLED->value => 'ملغاة',
+                // SelectFilter::make('status')
+                //     ->label('حالة المذكرة')
+                //     ->options([
+                //         BillStatus::DRAFT->value => 'مسودة',
+                //         BillStatus::PENDING->value => 'معلقة',
+                //         BillStatus::COMPLETED->value => 'مكتملة',
+                //         BillStatus::CANCELLED->value => 'ملغاة',
+                //     ])
+                //     ->placeholder('جميع الحالات'),
+
+                // الفلتر المتقدم مع التحديثات الدقيقة لأسماء الحقول والأزرار
+                Filter::make('advanced_search')
+                    ->form([
+                        // محاكاة زرّي البحث باستخدام ToggleButtons للحصول على تجربة UI متطورة
+                        ToggleButtons::make('search_mode')
+                            ->label('نوع البحث')
+                            ->options([
+                                'vol_serial' => 'بحث مجلد + متسلسل',
+                                'vol_financial' => 'بحث مجلد + المالي',
+                            ])
+                            ->colors([
+                                'vol_serial' => 'primary', // لون يحاكي النص الأحمر في صورتك
+                                'vol_financial' => 'primary',
+                            ])
+                            ->inline()
+                            ->grouped()
+                            ->default('vol_serial'), // الحالة الافتراضية للبحث
+
+                        Grid::make(4)->schema([
+                            TextInput::make('year')
+                                ->label('العام')
+                                ->default(now()->year)
+                                ->numeric()
+                                ->columnSpan(1),
+                                
+                            TextInput::make('reference_number')
+                                ->label('مجلد')
+                                ->columnSpan(1),
+                                
+                            TextInput::make('financial_number')
+                                ->label('رقم المالي')
+                                ->columnSpan(1),
+                                
+                            TextInput::make('serial_number')
+                                ->label('متسلسل')
+                                ->columnSpan(1),
+                        ])
                     ])
-                    ->placeholder('جميع الحالات'),
-            ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        $mode = $data['search_mode'] ?? 'vol_serial';
+
+                        return $query
+                            // 1. فلترة العام (تنفذ دائماً في حال وجود قيمة)
+                            ->when(
+                                $data['year'] ?? null,
+                                fn (Builder $query, $year): Builder => $query->whereYear('date', $year)
+                            )
+                            // 2. منطق: بحث مجلد + متسلسل (يطبق عندما يكون الزر الأول هو المختار)
+                            ->when(
+                                $mode === 'vol_serial',
+                                function (Builder $query) use ($data): Builder {
+                                    return $query
+                                        ->when($data['reference_number'] ?? null, fn($q, $v) => $q->where('reference_number', $v))
+                                        ->when($data['serial_number'] ?? null, fn($q, $s) => $q->where('serial_number', $s));
+                                }
+                            )
+                            // 3. منطق: بحث مجلد + المالي (يطبق عندما يكون الزر الثاني هو المختار)
+                            ->when(
+                                $mode === 'vol_financial',
+                                function (Builder $query) use ($data): Builder {
+                                    return $query
+                                        ->when($data['reference_number'] ?? null, fn($q, $v) => $q->where('reference_number', $v))
+                                        ->when($data['financial_number'] ?? null, fn($q, $f) => $q->where('financial_number', $f));
+                                }
+                            );
+                    })
+                    ->indicateUsing(function (array $data): array {
+                        $indicators = [];
+                        
+                        $modeLabel = ($data['search_mode'] ?? 'vol_serial') === 'vol_serial' 
+                            ? 'بحث مجلد + متسلسل' 
+                            : 'بحث مجلد + المالي';
+                            
+                        // إظهار المؤشر فقط إذا تم إدخال بيانات في حقول البحث
+                        if (!empty($data['reference_number']) || !empty($data['serial_number']) || !empty($data['financial_number'])) {
+                            $indicators[] = 'النمط النشط: ' . $modeLabel;
+                        }
+
+                        if ($data['reference_number'] ?? null) {
+                            $indicators[] = 'مجلد: ' . $data['reference_number'];
+                        }
+                        if ($data['serial_number'] ?? null) {
+                            $indicators[] = 'متسلسل: ' . $data['serial_number'];
+                        }
+                        if ($data['financial_number'] ?? null) {
+                            $indicators[] = 'الرقم المالي: ' . $data['financial_number'];
+                        }
+                        return $indicators;
+                    }),
+            ], layout: FiltersLayout::AboveContent)
+            ->filtersFormColumns(1)
             ->actions([
                 \Filament\Tables\Actions\ViewAction::make(),
                 \Filament\Tables\Actions\EditAction::make(),
-
-//                \Filament\Tables\Actions\Action::make('manage_items')
-//                    ->label('إضافة/تعديل مواد')
-//                    ->icon('heroicon-o-shopping-cart')
-//                    ->color('primary')
-//                    ->url(fn($record) => BillResource::getUrl('items', ['record' => $record])),
 
                 \Filament\Tables\Actions\Action::make('approve')
                     ->label('اعتماد')
@@ -159,7 +248,6 @@ class BillResource extends Resource
                     ->collapsible(),
             ]);
     }
-
 
     public static function getRelations(): array
     {
@@ -213,4 +301,3 @@ class BillResource extends Resource
         ];
     }
 }
-
