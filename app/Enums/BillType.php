@@ -4,10 +4,10 @@ namespace App\Enums;
 
 enum BillType: string
 {
-    case PURCHASE = 'purchase';
-    case TRANSFER = 'transfer';
-    case ADJUSTMENT = 'adjustment';
-    case RETURN = 'return';
+    case PURCHASE = 'استلام';
+    case TRANSFER = 'تركيب  وتنسيق';
+    case ADJUSTMENT = 'تسليم';
+    case RETURN = 'إدخال';
 
 
     public function label(): string

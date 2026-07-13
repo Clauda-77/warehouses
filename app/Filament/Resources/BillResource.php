@@ -13,14 +13,11 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteBulkAction;
-use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\Filter;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\ToggleButtons; // مكون الأزرار الجديد
-use Filament\Tables\Enums\FiltersLayout;
+use Filament\Forms\Components\ToggleButtons;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Notifications\Notification;
@@ -33,7 +30,6 @@ class BillResource extends Resource
     protected static ?string $modelLabel = 'مذكرة';
     protected static ?string $pluralModelLabel = 'المذكرات';
     protected static ?string $activeNavigationIcon = 'heroicon-o-chevron-double-down';
-
     protected static ?int $navigationSort = 2;
 
     public static function form(Form $form): Form
@@ -71,114 +67,99 @@ class BillResource extends Resource
                     ->money('SDG')
                     ->sortable(),
 
-                BadgeColumn::make('status')
-                    ->label('الحالة')
-                    ->formatStateUsing(fn($state) => match ($state) {
-                        BillStatus::DRAFT->value => 'مسودة',
-                        'pending' => 'معلقة',
-                        BillStatus::COMPLETED->value => 'مكتملة',
-                        'cancelled' => 'ملغاة',
-                        default => $state,
-                    })
-                    ->color(fn($state) => match ($state) {
-                        BillStatus::DRAFT->value => 'gray',
-                        'pending' => 'warning',
-                        BillStatus::COMPLETED->value => 'success',
-                        'cancelled' => 'default',
-                        default => 'gray',
-                    }),
-
                 TextColumn::make('billRecords_count')
                     ->label('عدد الأصناف')
                     ->counts('billRecords')
                     ->sortable(),
             ])
             ->filters([
-                // SelectFilter::make('status')
-                //     ->label('حالة المذكرة')
-                //     ->options([
-                //         BillStatus::DRAFT->value => 'مسودة',
-                //         BillStatus::PENDING->value => 'معلقة',
-                //         BillStatus::COMPLETED->value => 'مكتملة',
-                //         BillStatus::CANCELLED->value => 'ملغاة',
-                //     ])
-                //     ->placeholder('جميع الحالات'),
-
-                // الفلتر المتقدم مع التحديثات الدقيقة لأسماء الحقول والأزرار
                 Filter::make('advanced_search')
+                    ->label('البحث المتقدم')
                     ->form([
-                        // محاكاة زرّي البحث باستخدام ToggleButtons للحصول على تجربة UI متطورة
                         ToggleButtons::make('search_mode')
                             ->label('نوع البحث')
                             ->options([
                                 'vol_serial' => 'بحث مجلد + متسلسل',
                                 'vol_financial' => 'بحث مجلد + المالي',
+                                'item_name' => 'بحث حسب اسم المادة',
                             ])
                             ->colors([
-                                'vol_serial' => 'primary', // لون يحاكي النص الأحمر في صورتك
+                                'vol_serial' => 'primary',
                                 'vol_financial' => 'primary',
+                                'item_name' => 'success',
                             ])
                             ->inline()
                             ->grouped()
-                            ->default('vol_serial'), // الحالة الافتراضية للبحث
+                            ->default('vol_serial'),
 
-                        Grid::make(4)->schema([
+                        Grid::make(2)->schema([
                             TextInput::make('year')
                                 ->label('العام')
                                 ->default(now()->year)
                                 ->numeric()
                                 ->columnSpan(1),
-                                
+
                             TextInput::make('reference_number')
                                 ->label('مجلد')
                                 ->columnSpan(1),
-                                
+                        ]),
+
+                        Grid::make(2)->schema([
                             TextInput::make('financial_number')
                                 ->label('رقم المالي')
-                                ->columnSpan(1),
-                                
+                                ->columnSpan(1)
+                                ->visible(fn ($get) => ($get('search_mode') ?? 'vol_serial') === 'vol_financial'),
+
                             TextInput::make('serial_number')
                                 ->label('متسلسل')
-                                ->columnSpan(1),
-                        ])
+                                ->columnSpan(1)
+                                ->visible(fn ($get) => ($get('search_mode') ?? 'vol_serial') === 'vol_serial'),
+
+                            TextInput::make('item_name_search')
+                                ->label('اسم المادة')
+                                ->placeholder('أدخل اسم المادة')
+                                ->columnSpan(2)
+                                ->visible(fn ($get) => ($get('search_mode') ?? 'vol_serial') === 'item_name'),
+                        ]),
                     ])
                     ->query(function (Builder $query, array $data): Builder {
                         $mode = $data['search_mode'] ?? 'vol_serial';
 
-                        return $query
-                            // 1. فلترة العام (تنفذ دائماً في حال وجود قيمة)
-                            ->when(
-                                $data['year'] ?? null,
-                                fn (Builder $query, $year): Builder => $query->whereYear('date', $year)
-                            )
-                            // 2. منطق: بحث مجلد + متسلسل (يطبق عندما يكون الزر الأول هو المختار)
-                            ->when(
-                                $mode === 'vol_serial',
-                                function (Builder $query) use ($data): Builder {
-                                    return $query
-                                        ->when($data['reference_number'] ?? null, fn($q, $v) => $q->where('reference_number', $v))
-                                        ->when($data['serial_number'] ?? null, fn($q, $s) => $q->where('serial_number', $s));
-                                }
-                            )
-                            // 3. منطق: بحث مجلد + المالي (يطبق عندما يكون الزر الثاني هو المختار)
-                            ->when(
-                                $mode === 'vol_financial',
-                                function (Builder $query) use ($data): Builder {
-                                    return $query
-                                        ->when($data['reference_number'] ?? null, fn($q, $v) => $q->where('reference_number', $v))
-                                        ->when($data['financial_number'] ?? null, fn($q, $f) => $q->where('financial_number', $f));
-                                }
+                        $query->when(
+                            $data['year'] ?? null,
+                            fn (Builder $query, $year): Builder => $query->whereYear('date', $year)
+                        );
+
+                        if ($mode === 'vol_serial') {
+                            $query
+                                ->when($data['reference_number'] ?? null, fn($q, $v) => $q->where('reference_number', $v))
+                                ->when($data['serial_number'] ?? null, fn($q, $s) => $q->where('bill_number', 'LIKE', "%{$s}%"));
+                        }
+                        elseif ($mode === 'vol_financial') {
+                            $query
+                                ->when($data['reference_number'] ?? null, fn($q, $v) => $q->where('reference_number', $v))
+                                ->when($data['financial_number'] ?? null, fn($q, $f) => $q->where('financial_number', $f));
+                        }
+                        elseif ($mode === 'item_name') {
+                            $query->when(
+                                $data['item_name_search'] ?? null,
+                                fn($q, $search) => $q->whereHas('billRecords.item', fn($q2) => $q2->where('name', 'LIKE', "%{$search}%"))
                             );
+                        }
+
+                        return $query;
                     })
                     ->indicateUsing(function (array $data): array {
                         $indicators = [];
-                        
-                        $modeLabel = ($data['search_mode'] ?? 'vol_serial') === 'vol_serial' 
-                            ? 'بحث مجلد + متسلسل' 
-                            : 'بحث مجلد + المالي';
-                            
-                        // إظهار المؤشر فقط إذا تم إدخال بيانات في حقول البحث
-                        if (!empty($data['reference_number']) || !empty($data['serial_number']) || !empty($data['financial_number'])) {
+
+                        $modeLabel = match ($data['search_mode'] ?? 'vol_serial') {
+                            'vol_serial' => 'بحث مجلد + متسلسل',
+                            'vol_financial' => 'بحث مجلد + المالي',
+                            'item_name' => 'بحث حسب اسم المادة',
+                            default => '',
+                        };
+
+                        if (!empty($data['reference_number']) || !empty($data['serial_number']) || !empty($data['financial_number']) || !empty($data['item_name_search'])) {
                             $indicators[] = 'النمط النشط: ' . $modeLabel;
                         }
 
@@ -191,10 +172,14 @@ class BillResource extends Resource
                         if ($data['financial_number'] ?? null) {
                             $indicators[] = 'الرقم المالي: ' . $data['financial_number'];
                         }
+                        if ($data['item_name_search'] ?? null) {
+                            $indicators[] = 'اسم المادة: ' . $data['item_name_search'];
+                        }
                         return $indicators;
                     }),
-            ], layout: FiltersLayout::AboveContent)
-            ->filtersFormColumns(1)
+            ])
+             ->filtersFormColumns(2)
+            ->persistFiltersInSession(true)
             ->actions([
                 \Filament\Tables\Actions\ViewAction::make(),
                 \Filament\Tables\Actions\EditAction::make(),
@@ -229,8 +214,8 @@ class BillResource extends Resource
                     ->modalCancelActionLabel('إلغاء'),
             ])
             ->bulkActions([
-                 BulkActionGroup::make([
-                   DeleteBulkAction::make()
+                BulkActionGroup::make([
+                    DeleteBulkAction::make()
                         ->modalHeading('حذف المذكرات المحددة')
                         ->modalDescription('هل أنت متأكد من حذف المذكرات المحددة؟')
                         ->modalSubmitActionLabel('نعم، احذف')
@@ -242,10 +227,6 @@ class BillResource extends Resource
                 Group::make('type')
                     ->label('حسب النوع')
                     ->collapsible(),
-
-                 Group::make('status')
-                    ->label('حسب الحالة')
-                    ->collapsible(),
             ]);
     }
 
@@ -253,7 +234,7 @@ class BillResource extends Resource
     {
         return [
             BillRecordsRelationManager::class,
-         ];
+        ];
     }
 
     public static function getNavigationItems(): array
@@ -301,3 +282,6 @@ class BillResource extends Resource
         ];
     }
 }
+
+
+ 

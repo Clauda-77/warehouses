@@ -16,7 +16,12 @@ class Bill extends Model
         'bill_number', 'date', 'type', 'status', 'supplier_id', 'customer_id',
         'party_name', 'source_warehouse_id', 'destination_warehouse_id',
         'subtotal', 'discount', 'tax', 'total', 'reference_number',
-        'reference_date', 'notes', 'created_by', 'approved_by', 'approved_at'
+        'reference_date', 'notes', 'created_by', 'approved_by', 'approved_at',
+          'financial_number',
+    'invoice_number',
+    'invoice_date',
+    'purchase_order_number',
+    'purchase_order_date',
     ];
 
     protected $casts = [
